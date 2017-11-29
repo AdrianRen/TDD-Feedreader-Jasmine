@@ -57,12 +57,30 @@ $(function() {
       * the CSS to determine how we're performing the
       * hiding/showing of the menu element.
       */
-
+      it('should be hidden by default', () => {
+        expect($('body').hasClass('menu-hidden')).toBeTruthy();
+      });
       /* TODO: Write a test that ensures the menu changes
       * visibility when the menu icon is clicked. This test
       * should have two expectations: does the menu display when
       * clicked and does it hide when clicked again.
       */
+      // Declare varable
+      let menuVisible,
+          menuInvisible;
+      // The menu should be visible when its clicked
+      it('should be visibile when menu icon is clicked', () => {
+        $('.menu-icon-link').trigger('click');
+        menuVisible = $('body').hasClass('menu-hidden');
+        expect(menuVisible).toBeFalsy();
+      });
+
+      // The menu should be invisible when its clicked
+      it('should be invisibile when menu icon is clicked again', () => {
+        $('.menu-icon-link').trigger('click');
+        menuInvisible = $('body').hasClass('menu-hidden');
+        expect(menuInvisible).toBeTruthy();
+      });
     });
 
     /* TODO: Write a new test suite named "Initial Entries" */
@@ -73,6 +91,15 @@ $(function() {
       * Remember, loadFeed() is asynchronous so this test will require
       * the use of Jasmine's beforeEach and asynchronous done() function.
       */
+      beforeEach(done => {
+        // initial the feeds before checking
+        $('.feed').empty();
+        loadFeed(0, done);
+      });
+
+      it('should contain at least one entry element within the feed container', () => {
+        expect($('.feed').html().length).toBeGreaterThan(0);
+      })
     });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
@@ -81,5 +108,29 @@ $(function() {
       * by the loadFeed function that the content actually changes.
       * Remember, loadFeed() is asynchronous.
       */
+      let contentInitial,
+          contentUpdated;
+
+      beforeEach(done => {
+        // initial the feeds before checking
+        $('.feed').empty();
+
+        loadFeed(0, () => {
+          contentInitial = $('.feed').html();
+          done();
+        });
+      });
+
+      // Check if new feed is updated or not
+      it('should update its content', done => {
+        loadFeed(1, () => {
+          // updated content
+          contentUpdated = $('.feed').html();
+
+          // chenck if new feed equals preview content
+          expect(contentUpdated).not.toEqual(contentInitial);
+          done();
+        });
+      });
     });
 }());

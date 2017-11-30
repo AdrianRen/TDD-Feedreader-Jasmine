@@ -98,7 +98,7 @@ $(function() {
       });
 
       it('should contain at least one entry element within the feed container', () => {
-        expect($('.feed').html().length).toBeGreaterThan(0);
+        expect($('.feed .entry').html().length).toBeGreaterThan(0);
       })
     });
 
